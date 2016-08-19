@@ -1,6 +1,6 @@
-var gulp = require('gulp');
-var $ = require('gulp-load-plugins')({rename: {'gulp-rev-delete-original':'revdel', 'gulp-if': 'if'}});
-
+const THEME = 'landing_gat';
+const gulp  = require('gulp');
+const $ = require('gulp-load-plugins')({rename: {'gulp-rev-delete-original':'revdel', 'gulp-if': 'if'}});
 
 
 /* Tasks base */
@@ -10,7 +10,7 @@ gulp.task('copy', function() {
 });
 
 gulp.task('clean', function() {
-    return gulp.src(['wp-content/themes/landing_gat/css', 'wp-content/themes/landing_gat/js','wp-content/themes/landing_gat/img'], {read: false})
+    return gulp.src([`wp-content/themes/${THEME}/css`, `wp-content/themes/${THEME}/js`,`wp-content/themes/${THEME}/img`], {read: false})
         .pipe($.clean());
 });
 
@@ -18,15 +18,15 @@ gulp.task('clean', function() {
 
 /* Minificação */
 gulp.task('minify-js', function() {
-  return gulp.src('wp-content/themes/landing_gat/dev/js/**/*.js')
+  return gulp.src(`wp-content/themes/${THEME}/dev/js/**/*.js`)
     .pipe($.uglify())
-    .pipe(gulp.dest('wp-content/themes/landing_gat/js/'))
+    .pipe(gulp.dest(`wp-content/themes/${THEME}/js/`))
 });
 
 gulp.task('minify-css', function() {
-  return gulp.src('wp-content/themes/landing_gat/dev/css/**/*.css')
+  return gulp.src(`wp-content/themes/${THEME}/dev/css/**/*.css`)
     .pipe($.cssnano({safe: true}))
-    .pipe(gulp.dest('wp-content/themes/landing_gat/css/'))
+    .pipe(gulp.dest(`wp-content/themes/${THEME}/css/`))
 });
 
 /* Concatenação */
@@ -42,7 +42,7 @@ gulp.task('useref', function () {
 
 /* Imagens */
 gulp.task('imagemin', function() {
-    return gulp.src('wp-content/themes/landing_gat/dev/img/**/*')
+    return gulp.src(`wp-content/themes/${THEME}/dev/img/**/*`)
         .pipe($.imagemin({
             progressive: true,
             svgoPlugins: [
@@ -50,11 +50,11 @@ gulp.task('imagemin', function() {
                 {cleanupIDs: false}
             ]
         }))
-        .pipe(gulp.dest('wp-content/themes/landing_gat/img/'));
+        .pipe(gulp.dest(`wp-content/themes/${THEME}/img/`));
 });
 
 gulp.task('imagemin-uploads', function() {
-    return gulp.src('wp-content/themes/uploads/**/*')
+    return gulp.src(`wp-content/themes/uploads/**/*`)
         .pipe($.imagemin({
             progressive: true,
             svgoPlugins: [
@@ -69,21 +69,21 @@ gulp.task('imagemin-uploads', function() {
 
 /* Revisão de arquivos */
 gulp.task('rev', function(){
-  return gulp.src(['wp-content/themes/landing_gat/**/*.{css,js}'])
+  return gulp.src([`wp-content/themes/${THEME}/**/*.{css,js}`])
     .pipe($.rev())
     .pipe($.revdel())
-    .pipe(gulp.dest('wp-content/themes/landing_gat/'))
+    .pipe(gulp.dest(`wp-content/themes/${THEME}/`))
     .pipe($.rev.manifest())
-    .pipe(gulp.dest('wp-content/themes/landing_gat/'))
+    .pipe(gulp.dest(`wp-content/themes/${THEME}/`))
 })
 
 gulp.task('revreplace', ['rev'], function(){
-  return gulp.src('wp-content/themes/landing_gat/dev/css/**/*.css')
+  return gulp.src(`wp-content/themes/${THEME}/dev/css/**/*.css`)
     .pipe($.revReplace({
-        manifest: gulp.src('wp-content/themes/landing_gat/rev-manifest.json'),
+        manifest: gulp.src(`wp-content/themes/${THEME}/rev-manifest.json`),
         replaceInExtensions: ['.html', '.yaml', '.js', '.css']
     }))
-    .pipe(gulp.dest('wp-content/themes/landing_gat/css/'));
+    .pipe(gulp.dest(`wp-content/themes/${THEME}/css/`));
 });
 
 /* Alias */
